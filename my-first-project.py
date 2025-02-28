@@ -45,4 +45,56 @@ print()
 #   3 Циклы
 # Задание 3
 
-[print(i) for i in range(1, 11)]
+total = 0
+for i in range(1, 11):
+    print("Итерация", i)
+    total += i
+print()
+print("Итоговая сумма", total, end='\n')
+
+print('Введите цифру, которая напоминает О')
+n = int(input())
+print()
+
+while n != 0:
+    print('Вы введли цифру:', n)
+    print('Ты особенный, но попробуй еще раз.')
+    n = int(input())
+    print()
+print('Вы введли цифру:', n)
+print('Можешь собой гордиться! Цикл завершен.')
+print()
+
+
+#   4 Функции
+# Задание 4
+
+
+print('Введите 2 числа')
+c, d = int(input()), int(input())
+def multiply(a, b):
+    return f'Произведение {a} и {b} = {a * b}'
+
+print(multiply(c, d))
+print()
+
+print('Введите число, я сообщу: четное оно или нет')
+e = int(input())
+def is_even(a):
+    return f'Число {("нечетное", "четное")[a % 2 == 0]}'
+
+print(is_even(e))
+print()
+
+print('Введите 3 числа, а я найду самое большое среди них')
+g, f, d = int(input()), int(input()), int(input())
+print()
+def get_max(a, b, c):
+    return f'Максимальное число: {max(a, b, c)}'
+    
+print(get_max(g, f, d))
+print()
+
+
+
+
