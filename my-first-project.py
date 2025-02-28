@@ -26,7 +26,9 @@ books = ['1984', 'Над пропастью во ржи', 'Марсианин']
 
 info = {'name': name, 'age': age, 'hobby': 'games'}
 
-[print(txt, info[txt]) for txt in info]
+for key in info:
+    print(key, info[key])
+
 print()
 
 
@@ -87,12 +89,12 @@ print(is_even(e))
 print()
 
 print('Введите 3 числа, а я найду самое большое среди них')
-g, f, d = int(input()), int(input()), int(input())
+g, f, r = int(input()), int(input()), int(input())
 print()
 def get_max(a, b, c):
     return f'Максимальное число: {max(a, b, c)}'
     
-print(get_max(g, f, d))
+print(get_max(g, f, r))
 print()
 
 
