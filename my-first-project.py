@@ -22,15 +22,16 @@ is_student = False
 print(f'''Имя: {name},
 Возраст: {age},
 Средний балл: {av_point},
-{("Не студент", "Студент")[is_student]}''')
+{"Студент" if is_student else "Не студент"}''')
+
 print()
 
 books = ['1984', 'Над пропастью во ржи', 'Марсианин']
 
 info = {'name': name, 'age': age, 'hobby': 'games'}
 
-for key in info:
-    print(key, info[key])
+for key, value in info.items():
+    print(key, value)
 
 print()
 
@@ -76,28 +77,45 @@ print()
 
 
 print('Введите 2 числа')
-c, d = int(input()), int(input())
+n1, n2 = int(input()), int(input())
 def multiply(a, b):
+    """
+    Вычисляет произведение двух чисел.
+    
+    :param a: первое число
+    :param b: второе число
+    :return: строка с результатом произведения
+    """
     return f'Произведение {a} и {b} = {a * b}'
 
-print(multiply(c, d))
+print(multiply(n1, n2))
 print()
 
 print('Введите число, я сообщу: четное оно или нет')
-e = int(input())
+n3 = int(input())
 def is_even(a):
+    """
+    Определяет, является число четным или нечетным
+    :param a: число на проверку
+    """
     return f'Число {("нечетное", "четное")[a % 2 == 0]}'
 
-print(is_even(e))
+print(is_even(n3))
 print()
 
 print('Введите 3 числа, а я найду самое большое среди них')
-g, f, r = int(input()), int(input()), int(input())
+n4, n5, n6 = int(input()), int(input()), int(input())
 print()
 def get_max(a, b, c):
+    '''
+    Определяет максимальное число среди трех введенных
+    :param a: первое число
+    :param b: второе число
+    :param c: третье число
+    '''
     return f'Максимальное число: {max(a, b, c)}'
     
-print(get_max(g, f, r))
+print(get_max(n4, n5, n6 ))
 print()
 
 
