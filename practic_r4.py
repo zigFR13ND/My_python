@@ -40,6 +40,75 @@ class Rectangle:
         return 2 * (self.width + self.height)
 
 
+
+class Employee:
+    """
+    Класс Employee представляет сотрудника с атрибутами имя и зарплата.
+    """
+    def __init__(self, name, salary):
+        """
+        Инициализирует новый экземпляр сотрудника.
+        
+        :param name: Имя сотрудника
+        :param salary: Зарплата сотрудника
+        """
+        self.name = name
+        self.salary = salary
+
+    def work(self):
+        """
+        Метод возвращает строку 'Сотрудник работает'
+        """
+        return 'Сотрудник работает'
+
+
+class Developer(Employee):
+    """
+    Класс Developer наследует Employee и добавляет атрибут programming_language.
+    """
+    def __init__(self, name, salary, programming_language):
+        """
+        Инициализирует нового разработчика.
+
+        :param name: Имя разработчика
+        :param salary: Зарплата разработчика
+        :param programming_language: Язык программирования
+        """
+        super().__init__(name, salary)
+        self.programming_language = programming_language
+
+    
+    def work(self):
+        """
+        Переопределяет метод work для разработчика.
+        """
+        return f'Разрабатывает программное обеспечение на {self.programming_language}'
+        
+
+class Designer(Employee):
+    """
+    Класс Designer наследует Employee и добавляет атрибут tool.
+    """
+    def __init__(self, name, salary, tool):
+        """
+        Инициализирует нового дизайнера.
+
+        :param name: Имя дизайнера
+        :param salary: Зарплата дизайнера
+        :param tool: Инструмент дизайнера
+        """
+        super().__init__(name, salary)
+        self.tool = tool
+
+
+    def work(self):
+        """
+        Переопределяет метод work для дизайнера.
+        """
+        return f'Создаёт дизайн с помощью {self.tool}'
+
+    
+
 if __name__ == '__main__':
     # Создаем объект прямоугольника с заданными размерами
     rect = Rectangle(5, 3)
@@ -52,5 +121,12 @@ if __name__ == '__main__':
     print("Площадь:", area)
     
     # Вычисляем и выводим периметр прямоугольника
-    perimeter = rect.perimeter()
+    perimeter = rect.perimetr()
     print("Периметр:", perimeter)
+
+    # Создаем объект сотрудника с Именем и зарплатой.
+    developer = Developer("Алексей", 80000, "Python")
+    print(f'{developer.name} ({developer.__class__.__name__}): {developer.work()}')
+
+    designer = Designer('Мария', 100000, 'Photoshop')
+    print(f'{designer.name} ({designer.__class__.__name__}): {designer.work()}')
