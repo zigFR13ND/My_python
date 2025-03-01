@@ -1,3 +1,6 @@
+# my-first-project.py
+
+
 print("Как тебя зовут?") 
 name = input()
 
