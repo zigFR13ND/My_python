@@ -1,17 +1,40 @@
 # practic_r4.py
 
-def count_lines_and_words(filename):
-    with open(filename, 'r', encoding='utf-8') as file:
-        lines = 0
-        words = 0
-        for line in file:
-            lines += 1
-            words += len(line.split())
-            
-        with open('result.txt', 'w', encoding='utf-8') as result:
-            result.write(f'Количество строк: {lines}\n')
-            result.write(f'Количество слов: {words}\n')
+#   Раздел 4. Объектно-ориентированное программирование (ООП)
+# Тема 1: Классы и объекты
+
+
+class Rectangle:
+    """
+    Класс Rectangle представляет прямоугольник с атрибутами width (ширина) и height (высота).
+    """
+    def __init__(self, width, height):
+        # Метод __init__ вызывается при создании нового объекта.
+        self.width = width
+        self.height = height
+
     
 
+    def area(self):
+        """
+        Метод для расчета площади прямоугольника.
+        """
+        return self.width * self.height
 
-count_lines_and_words('data.txt')
+
+    def perimetr(self):
+        """
+        Метод для расчета периметра прямоугольника
+        """
+        return 2 * (self.width + self.height)
+
+
+# Создание объекта (экземпляра класса Rectangle)
+rec = Rectangle(5, 3)
+print(f'Прямоугольник: ширина {rec.width}, высота {rec.height}')
+
+# Использование методов класса
+area1 = rec.area()
+perim1 = rec.perimetr()
+print(f'Площадь: {area1}')
+print(f'Периметр: {perim1}')
