@@ -6,9 +6,7 @@ app = Flask(__name__)
 
 # Конфигурация подключения к базе данных: база данных SQLite будет храниться в файле app.db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-
-# Конфигурация подключения к базе данных: база данных SQLite будет храниться в файле app.db
-app.config['SQLALCHEMY_DATABASE_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Инициализация ORM
 db = SQLAlchemy(app)
@@ -21,12 +19,12 @@ class User(db.Model):
       - name: имя пользователя (строка)
       - age: возраст пользователя (целое число)
     """
-    id = db.Column(db.Integer, primary_kae=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     age = db.Column(db.Integer)
 
     def __repr__(self):
-        return f"<Пользоватеь {self.name}>"
+        return f"<Пользователь {self.name}>"
     
 
 @app.route("/add_user/<name>/<ind:age>")
