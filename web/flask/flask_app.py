@@ -32,7 +32,7 @@ class User(db.Model):
     age = db.Column(db.Integer)
 
     def __repr__(self):
-        return f"<User {self.name}>"
+        return f"<Пользователь {self.name}>"
     
 
 @app.route("/add_user/<name>/<int:age>")
@@ -48,7 +48,20 @@ def add_user(name, age):
     new_user = User(name=name, age=age)
     db.session.add(new_user)
     db.session.commit()
-    return f"User {name} added successfully!"
+    return f"Пользователь {name} успешно создан!"
+
+
+@app.route("/users")
+def get_users():
+    """
+    Возвращает список всех пользователей в формате JSON.
+    
+    URL: /users
+    :return: JSON-ответ со списком пользователей.
+    """
+    users = User.query.all()
+    users_list = [{"id": user.id, "name": user.name, "age": user.age} for user in users]
+    return jsonify(users_list)
 
 
 # Декоратор @app.route("/") указывает, что функция ниже должна обрабатывать запросы к URL "/".
