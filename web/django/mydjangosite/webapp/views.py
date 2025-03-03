@@ -10,6 +10,8 @@ def home(request):
 
 
 def api_info(request):
-        """
+    """
     Возвращает информацию о приложении в формате JSON.
     """
+    data = {"app": "Django Demo", "version": "1.0"}
+    return JsonResponse(data)
