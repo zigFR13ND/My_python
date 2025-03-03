@@ -1,4 +1,4 @@
-# Python Learning Repository_
+# Python Learning Repository
 
 Мой репозиторий, посвящённый обучению Python!
 
