@@ -21,13 +21,14 @@ class FlaskAppTestCase(unittest.TestCase):
         # Тест главной страницы
         response = self.app.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Добро пожаловать в Flask Demo!', response.data)
+        self.assertIn('Добро пожаловать в Flask Demo!'.encode('utf-8'), response.data)
+
 
     def test_add_user(self):
         # Тест добавления пользователя
         response = self.app.get('/add_user/TestUser/25')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Пользователь TestUser успешно создан!', response.data)
+        self.assertIn('Пользователь TestUser успешно создан!'.encode('utf-8'), response.data)
 
         # Проверка, что пользователь появился в базе
         with app.app_context():
