@@ -4,10 +4,51 @@
 
 # Импортируем класс Flask и необходимые функции из модуля flask.
 from flask import Flask, render_template, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
 
 # Создаем экземпляр приложения. Аргумент __name__ помогает Flask определить, где искать ресурсы.
 app = Flask(__name__)
+
+# Конфигурация подключения к базе данных: база данных SQLite будет храниться в файле app.db
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
+# Отключаем уведомления об изменениях (не обязательный параметр)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Инициализация ORM
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    """
+    Модель User представляет таблицу пользователей.
+    Поля:
+      - id: уникальный идентификатор (целое число, первичный ключ)
+      - name: имя пользователя (строка)
+      - age: возраст пользователя (целое число)
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    age = db.Column(db.Integer)
+
+    def __repr__(self):
+        return f"<User {self.name}>"
+    
+
+@app.route("/add_user/<name>/<int:age>")
+def add_user(name, age):
+    """
+    Добавляет нового пользователя в базу данных.
+    
+    URL: /add_user/<name>/<age>
+    :param name: Имя пользователя.
+    :param age: Возраст пользователя.
+    :return: Строка с сообщением об успешном добавлении.
+    """
+    new_user = User(name=name, age=age)
+    db.session.add(new_user)
+    db.session.commit()
+    return f"User {name} added successfully!"
 
 
 # Декоратор @app.route("/") указывает, что функция ниже должна обрабатывать запросы к URL "/".
@@ -32,5 +73,9 @@ def greet(name):
 
 
 # Этот блок гарантирует, что приложение запустится только если файл запускается напрямую.
-if __name__ == '__main__':
+if __name__ == "__main__":
+    # Создание всех таблиц (если они ещё не созданы)
+    with app.app_context():
+        db.create_all()
+    # Запуск приложения в режиме отладки (для разработки)
     app.run(debug=True)
