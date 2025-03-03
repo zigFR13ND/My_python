@@ -22,7 +22,6 @@ My_python/ ├
 
 - Python 3.x
 - Для Flask-приложений:
-  ```bash
   pip install Flask Flask-SQLAlchemy
 
 
