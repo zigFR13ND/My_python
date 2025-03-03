@@ -27,7 +27,7 @@ class User(db.Model):
         return f"<Пользователь {self.name}>"
     
 
-@app.route("/add_user/<name>/<ind:age>")
+@app.route("/add_user/<name>/<int:age>")
 def add_user(name, age):
     """
     Добавляет нового пользователя в базу данных.
@@ -51,6 +51,14 @@ def get_users():
     URL: /users
     :return: JSON-ответ со списком пользователей.
     """
-    users = User.query.all
+    users = User.query.all()
     users_list = [{'id':user.id, 'user':user.name, 'age':user.age} for user in users]
-    return users_list
+    return jsonify(users_list)
+
+# Этот блок гарантирует, что приложение запустится только если файл запускается напрямую.
+if __name__ == "__main__":
+    # Создание всех таблиц (если они ещё не созданы)
+    with app.app_context():
+        db.create_all()
+    # Запуск приложения в режиме отладки (для разработки)
+    app.run(debug=True)
