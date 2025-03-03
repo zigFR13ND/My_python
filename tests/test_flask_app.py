@@ -7,6 +7,7 @@ class FlaskAppTestCase(unittest.TestCase):
         self.app = app.test_client()
         # Перед каждым тестом создаем новую базу данных в памяти
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        app.config['TESTING'] = True
         with app.app_context():
             db.create_all()
 
@@ -44,6 +45,18 @@ class FlaskAppTestCase(unittest.TestCase):
         # Проверяем, что в ответе содержатся имена Alice и Bob
         self.assertIn(b'Alice', response.data)
         self.assertIn(b'Bob', response.data)
+
+    def test_api_info(self):
+        # Тест API информации
+        response = self.app.get('/api/info')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {"app": "Flask Demo", "version": "1.0"})
+
+    def test_greet(self):
+        # Тест приветствия
+        response = self.app.get('/greet/John')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Hello, John!', response.data)
 
 if __name__ == '__main__':
     unittest.main()
