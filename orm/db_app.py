@@ -55,6 +55,19 @@ def get_users():
     users_list = [{'id':user.id, 'user':user.name, 'age':user.age} for user in users]
     return jsonify(users_list)
 
+@app.route("/")
+def home():
+    return "Добро пожаловать в Flask Demo!"
+
+@app.route("/greet/<name>")
+def greet(name):
+    return f"Hello, {name}!"
+
+@app.route("/api/info")
+def api_info():
+    return jsonify({"app": "Flask Demo", "version": "1.0"})
+
+
 # Этот блок гарантирует, что приложение запустится только если файл запускается напрямую.
 if __name__ == "__main__":
     # Создание всех таблиц (если они ещё не созданы)
