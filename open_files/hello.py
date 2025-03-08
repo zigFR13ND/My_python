@@ -17,6 +17,8 @@ try:
         content = file.read()
         print("\nСодержимое файла:")
         print(content)
+    print(input("Нажмите Enter, чтобы выйти..."))
+
 
 except KeyboardInterrupt:  # ✅ Теперь Ctrl+C правильно обрабатывается
     print("\nВы прервали ввод. Программа завершена.")
