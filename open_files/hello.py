@@ -12,6 +12,12 @@ try:
             if txt:  # ✅ Если строка НЕ пустая, записываем 
                 file.write(f'{txt}\n')
 
+    # ✅ Если всё прошло успешно, читаем файл
+    with open('hello.txt', 'r', encoding='utf-8') as file:
+        content = file.read()
+        print("\nСодержимое файла:")
+        print(content)
+
 except KeyboardInterrupt:  # ✅ Теперь Ctrl+C правильно обрабатывается
     print("\nВы прервали ввод. Программа завершена.")
 
