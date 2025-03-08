@@ -1,13 +1,10 @@
-with open('hello.txt', 'w', encoding='utf-8') as file:
-    file.write('Привет, это мой первый файл!\n')
-
-with open('hello.txt', 'r', encoding='utf-8') as file:
-    content = file.read()
-    print(content)
-
 with open('hello.txt', 'a', encoding='utf-8') as file:
-    file.write("Добавляем еще текст.\n")  # ✅ Добавляем перенос строки
+    print('Введите ваш текст или "стоп" для завершения')
 
-with open('hello.txt', 'r', encoding='utf-8') as file:
-    content = file.readlines()  # ✅ Теперь читаем ВСЕ строки
-    print(content)  # Выведет список строк
+    txt = ""  # ✅ Инициализируем txt перед циклом
+    while txt.lower() != 'стоп':  # ✅ Проверяем с учётом регистра
+        txt = input()
+        if txt.lower() != 'стоп':  # ✅ Не записываем "стоп" в файл
+            file.write(f'{txt}\n')
+
+    print('Ввод завершен')
