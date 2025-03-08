@@ -12,5 +12,8 @@ try:
             if txt:  # ✅ Если строка НЕ пустая, записываем 
                 file.write(f'{txt}\n')
 
-except Exception as e:  # ✅ Теперь try-except правильно расположен
+except KeyboardInterrupt:  # ✅ Теперь Ctrl+C правильно обрабатывается
+    print("\nВы прервали ввод. Программа завершена.")
+
+except Exception as e:  # ✅ Ловим все другие ошибки
     print(f"Ошибка: {e}")  
