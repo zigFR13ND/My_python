@@ -1,10 +1,12 @@
 with open('hello.txt', 'a', encoding='utf-8') as file:
     print('Введите ваш текст или "стоп" для завершения')
 
-    txt = ""  # ✅ Инициализируем txt перед циклом
-    while txt.lower() != 'стоп':  # ✅ Проверяем с учётом регистра
-        txt = input()
-        if txt.lower() != 'стоп':  # ✅ Не записываем "стоп" в файл
-            file.write(f'{txt}\n')
+    while True:
+        txt = input().strip()  # ✅ Убираем лишние пробелы
 
-    print('Ввод завершен')
+        if txt.lower() == 'стоп':  # ✅ Проверяем "стоп" (регистр неважен)
+            print('Ввод завершен')
+            break  # ✅ Выходим из цикла
+
+        if txt:  # ✅ Если строка НЕ пустая, записываем
+            file.write(f'{txt}\n')
