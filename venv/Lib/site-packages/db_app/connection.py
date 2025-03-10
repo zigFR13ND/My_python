@@ -1,0 +1,54 @@
+import psycopg2, os
+import mariadb
+class PostgresConnector():
+    def __init__(self) -> None:
+        self._con: psycopg2.connection = None
+        self._cur: psycopg2.cursor = None
+    
+    def open(self,database="postgres") -> any:
+        if self._con == None:
+            self._con = self._get_connection(database=database)
+            self._con.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+            self._cur = self._con.cursor()
+        return [self._con, self._cur]
+    
+    def close(self) -> None:
+        if self._con != None:
+            self._con.commit()
+            self._cur.close()
+            self._con.close()
+
+    def _get_connection(self,database) -> any:
+        return psycopg2.connect(
+            host=os.environ['DBP_HOST'],
+            port=os.environ['DBP_PORT'],
+            database=database,
+            user=os.environ['DBP_USER'],
+            password=os.environ['DBP_PASSWORD']
+        )
+
+
+class MariaDBConnector():
+    def __init__(self) -> None:
+        self._con: mariadb.Connection = None
+        self._cur: mariadb.Cursor = None
+    
+    def open(self) -> any:
+        if self._con == None:
+            self._con = self._get_connection()
+            self._cur = self._con.cursor()
+        return [self._con, self._cur]
+    
+    def close(self) -> None:
+        if self._con != None:
+            self._con.commit()
+            self._cur.close()
+            self._con.close()
+
+    def _get_connection(self) -> any:
+        return mariadb.connect(
+            host= os.environ['DBM_HOST'],
+            port= int(os.environ['DBM_PORT']),
+            user=os.environ['DBM_USER'],
+            password=os.environ['DBM_PASSWORD']
+        )

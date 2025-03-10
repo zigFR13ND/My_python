@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: db-app
+Version: 0.0.2
+Summary: Database app automatization
+Author: -
+License: MIT
+Requires-Dist: mariadb (==1.1.5.post3)
+Requires-Dist: packaging (==21.3)
+Requires-Dist: psycopg2-binary (==2.9.3)
+Requires-Dist: pyparsing (==3.0.)
+Requires-Dist: protobuf (==4.21.9)
+

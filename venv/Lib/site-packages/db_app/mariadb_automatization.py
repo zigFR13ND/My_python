@@ -1,0 +1,61 @@
+import mariadb
+import os
+from db_app.connection import PostgresConnector,MariaDBConnector
+
+
+
+def create_user(username, password):
+    mariadb_connection = MariaDBConnector()
+    con,cursor = mariadb_connection.open()
+    try:
+        cursor.execute(
+            "CREATE USER {}@'%' IDENTIFIED BY '{}';".format(username,password))
+    except mariadb.Error as e:
+        print(f"Error connecting to MariaDB Platform: {e}")
+        exit(1)    
+    mariadb_connection.close()
+    
+
+def create_database(username,context):
+    mariadb_connection = MariaDBConnector()
+    con,cursor = mariadb_connection.open()
+    complete = False
+    try:
+        cursor.execute("CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8';".format(context))
+        cursor.execute("GRANT ALL PRIVILEGES ON {}.* TO {}@'%';".format(context,username))
+        complete = True
+    except mariadb.Error as e:
+        print(f"Failed creating database: : {e}")
+        exit(1)
+    
+    mariadb_connection.close()
+    return complete
+
+def delete_database(context):
+    mariadb_connection = MariaDBConnector()
+    con,cursor = mariadb_connection.open()
+    complete = False
+    try:
+        cursor.execute("DROP DATABASE {};".format(context))
+        complete = True
+    except mariadb.Error as e:
+        print(f"Failed deleting database: : {e}")
+        exit(1)
+
+    mariadb_connection.close()
+    return complete
+
+def count_tables(context)->int:
+    mariadb_connection = MariaDBConnector()
+    con,cursor = mariadb_connection.open()
+    number = 0
+    try:
+        cursor.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '{}';".format(context))
+        number = cursor.fetchall()
+    except Exception as e:
+        print(f"Failed count tables : {e}")
+        exit(1)
+    
+    mariadb_connection.close()
+    return number[0][0]
+

@@ -1,0 +1,77 @@
+import psycopg2
+from db_app.connection import PostgresConnector,MariaDBConnector
+
+def create_user(username, password):
+    psql = PostgresConnector()
+    con,cursor = psql.open()
+    try:
+        cursor.execute(
+            "CREATE USER {} with encrypted password  '{}';".format(username,password))
+    except Exception as e:
+        print(f"Error  Postgres Platform: {e}")
+        exit(1)    
+    psql.close()
+    
+
+def create_database(username,context):
+    psql = PostgresConnector()
+    con,cursor = psql.open()
+    complete = False
+    
+    try:
+        cursor.execute("CREATE DATABASE {};".format(context))    
+        cursor.execute("GRANT ALL PRIVILEGES ON DATABASE {} TO {};".format(context,username))
+        complete = True
+    except Exception as e:
+        print(f"Failed creating database: : {e}")
+        exit(1)
+    
+    psql.close()
+    return complete
+
+
+def grant_privileges(username,context):
+    psql = PostgresConnector()
+    con,cursor = psql.open(context)
+    complete = False
+    
+    try:
+        cursor.execute("GRANT ALL PRIVILEGES ON DATABASE {} TO {};".format(context,username))
+        cursor.execute("GRANT ALL PRIVILEGES ON SCHEMA public TO {};".format(username))
+        complete = True
+    except Exception as e:
+        print(f"Failed grant privileges database: : {e}")
+        exit(1)
+    
+    psql.close()
+    return complete
+
+def delete_database(context):
+    psql = PostgresConnector()
+    con,cursor = psql.open()
+    complete = False
+    try:
+        cursor.execute("DROP DATABASE {};".format(context))
+        complete = True
+    except Exception as e:
+        print(f"Failed deleting database: : {e}")
+        exit(1)
+
+    psql.close()
+    return complete
+
+
+def count_tables(context)->int:
+    psql = PostgresConnector()
+    con,cursor = psql.open(context)
+    number = 0
+    try:
+        cursor.execute("select count(*) from information_schema.tables where table_schema = 'public';")
+        number = cursor.fetchall()
+    except Exception as e:
+        print(f"Failed count tables : {e}")
+        exit(1)
+    
+    psql.close()
+    return number[0][0]
+
