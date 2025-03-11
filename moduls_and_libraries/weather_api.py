@@ -7,7 +7,10 @@ load_dotenv()  # Загружаем переменные из .env
 API_KEY = os.getenv("WEATHER_API_KEY")  # Получаем токен
 
 
-city = "London"  # 📍 Город (можно изменить)
+# 🔍 Определяем IP и местоположение
+geo_response = requests.get("http://ip-api.com/json/")
+geo_data = geo_response.json()
+city = geo_data["city"]  # Получаем город
 
 url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric&lang=ru"
 
