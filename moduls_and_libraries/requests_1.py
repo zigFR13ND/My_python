@@ -1,62 +1,80 @@
 import requests
+import json  # Для красивого вывода JSON
 
-##  GET — это запрос на получение данных с сервера (например, загрузка веб-страницы).
-#
-#
-#   Простой GET-запрос
-response = requests.get("https://httpbin.org/get")  # Отправляем GET-запрос
-print(response.text)  # Выводим ответ сервера
+# ===========================
+# 1. ПРОСТОЙ GET-ЗАПРОС
+# ===========================
+response_get = requests.get("https://httpbin.org/get")  # Отправляем GET-запрос
+print("\n📌 1. Простой GET-запрос")
+print(json.dumps(response_get.json(), indent=4, ensure_ascii=False))  # Выводим JSON-ответ
 
-#   Разбор ответа сервера (JSON)
-data = response.json()  # Преобразуем ответ в словарь
-print("\n📌 Выводим JSON:")
-print(data)  # Выводим JSON
-print("\n📌 Получаем заголовки запроса:")
-print(data["headers"])  # Получаем заголовки запроса
+# ===========================
+# 2. GET-ЗАПРОС С ПАРАМЕТРАМИ
+# ===========================
+params = {"name": "Ильнур", "age": 33}  # Передаём параметры запроса
+response_params = requests.get("https://httpbin.org/get", params=params)  # Отправляем GET-запрос с параметрами
+print("\n📌 2. GET-запрос с параметрами")
+print("URL запроса:", response_params.url)  # Выводим URL с параметрами
+print(json.dumps(response_params.json(), indent=4, ensure_ascii=False))  # Выводим JSON-ответ
 
-# Можно передавать параметры запроса (например, name=Ильнур)
-params = {"name": "Ильнур", "age": 33}
-response_2 = requests.get("https://httpbin.org/get", params=params)
-print("\n📌 Response 2 (URL с параметрами):")
-print(response_2.url)  # URL с параметрами
-# Сервер получит https://httpbin.org/get?name=Ильнур&age=25.
+# ===========================
+# 3. POST-ЗАПРОС (data={})
+# ===========================
+data_post = {"username": "Ilnur", "password": "12345"}  # Данные для отправки
+response_post = requests.post("https://httpbin.org/post", data=data_post)  # Отправляем POST-запрос с data={}
+print("\n📌 3. POST-запрос (data={})")
+print(json.dumps(response_post.json(), indent=4, ensure_ascii=False))  # Выводим JSON-ответ
 
-data_2 = response_2.json() 
-print(f"\nИмя: {data_2['args']['name']}\nВозраст: {data_2['args']['age']}")
+# ===========================
+# 4. POST-ЗАПРОС (json={})
+# ===========================
+response_post_json = requests.post("https://httpbin.org/post", json=data_post)  # Отправляем POST-запрос с json={}
+print("\n📌 4. POST-запрос (json={})")
+print(json.dumps(response_post_json.json(), indent=4, ensure_ascii=False))  # Выводим JSON-ответ
 
-#🔹 requests.get(URL) — отправляет GET-запрос.
-#🔹 response.text — получает ответ в виде строки.
-#🔹 response.json() — превращает JSON-ответ в словарь.
-#🔹 params={} — передаёт параметры запроса.
+# ===========================
+# 5. PUT-ЗАПРОС (Обновление данных)
+# ===========================
+data_put = {"username": "Ilnur", "password": "newpassword"}  # Обновляемые данные
+response_put = requests.put("https://httpbin.org/put", json=data_put)  # Отправляем PUT-запрос с json={}
+print("\n📌 5. PUT-запрос (Обновление данных)")
+print(json.dumps(response_put.json(), indent=4, ensure_ascii=False))  # Выводим JSON-ответ
 
+# ===========================
+# 6. DELETE-ЗАПРОС (Удаление данных)
+# ===========================
+data_delete = {"username": "Ilnur"}  # Данные для удаления
+response_delete = requests.delete("https://httpbin.org/delete", json=data_delete)  # Отправляем DELETE-запрос
+print("\n📌 6. DELETE-запрос (Удаление данных)")
+print(json.dumps(response_delete.json(), indent=4, ensure_ascii=False))  # Выводим JSON-ответ
 
-##  POST-запрос используется для отправки данных (например, формы на сайте или запроса к API).
-#
-# GET передаёт параметры в URL (?key=value), а POST передаёт данные в теле запроса.
+# ===========================
+# 7. ПРОВЕРКА УДАЛЕНИЯ ПОСТА
+# ===========================
+post_id = 1  # ID удаляемого поста
+delete_response = requests.delete(f'https://jsonplaceholder.typicode.com/posts/{post_id}')  # Отправляем DELETE-запрос
+print("\n📌 7. Удаление поста (JSONPlaceholder)")
+print("Статус-код:", delete_response.status_code)  # Выводим статус-код удаления
 
-# POST-запрос с requests.post()
-data_3 = {"username": "Ilnur", "password": "12345"}  # Данные для отправки
-response_3 = requests.post("https://httpbin.org/post", data=data_3)
-print("\n📌 Response 3 (data={}):")
-print(response_3.json())  # Вывод ответа сервера
+get_response = requests.get(f'https://jsonplaceholder.typicode.com/posts/{post_id}')  # Проверяем, удалён ли пост
+print("Статус-код после удаления:", get_response.status_code)  # Выводим статус-код повторного GET-запроса
+if get_response.status_code == 404:
+    print("✅ Пост успешно удалён!")  # Если 404, значит пост удалён
+else:
+    print("❌ Пост всё ещё существует! (JSONPlaceholder не удаляет данные)")
 
+# ===========================
+# 8. ЗАПРОС С Bearer Token
+# ===========================
+url = 'https://httpbin.org/bearer'
+headers_bearer = {"Authorization": "Bearer your_api_token_123"}  
 
-#  Отправка JSON-данных (json={})
-data_4 = {"username": "Ilnur", "password": "12345"}  # JSON-данные
-response_4 = requests.post("https://httpbin.org/post", json=data_4)
-print("\n📌 Response 4 (json={}):")
-print(response_4.json())  # Вывод JSON-ответа
+response_bearer = requests.get(url, headers=headers_bearer)
 
+print("\n📌 8. Запрос с Bearer Token:")
 
-# data={} → отправляет как обычные формы (x-www-form-urlencoded). Используется, если сервер ожидает обычные HTML-формы (как на сайтах).  Данные отправляются в теле запроса в виде key=value&key=value.
-#  Когда использовать? Если API или сайт принимает обычные формы (Content-Type: application/x-www-form-urlencoded). Например, если нужно авторизоваться на сайте через requests.
-
-# json={} → отправляет как JSON (application/json). Используется, если сервер ожидает JSON-формат (Content-Type: application/json). Данные отправляются как {"key": "value"} в теле запроса.
-#  Когда использовать? Если API требует JSON (Content-Type: application/json). Например, если работаешь с Telegram API, VK API, GitHub API.
-
-#💡 Главное правило:
-
-# Если сервер ждёт HTML-форму → используй data={}.   "form"	Обычные формы (например, авторизация на сайте)
-# Если сервер ждёт JSON → используй json={}.          API, которые принимают JSON (например, Telegram API)
-
-
+if response_bearer.status_code == 401:
+    print("❌ Неверный токен! Доступ запрещён.")
+else:
+    print("✅ Токен верный! Доступ разрешён.")
+    print(response_bearer.json())  # Выводим ответ
