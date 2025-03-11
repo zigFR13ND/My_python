@@ -73,8 +73,11 @@ response_bearer = requests.get(url, headers=headers_bearer)
 
 print("\n📌 8. Запрос с Bearer Token:")
 
-if response_bearer.status_code == 401:
-    print("❌ Неверный токен! Доступ запрещён.")
-else:
-    print("✅ Токен верный! Доступ разрешён.")
-    print(response_bearer.json())  # Выводим ответ
+try:
+    if response_bearer.status_code == 401:
+        print("❌ Неверный токен! Доступ запрещён.")
+    else:
+        print("✅ Токен верный! Доступ разрешён.")
+        print(response_bearer.json())  # Выводим ответ
+except requests.exceptions.RequestException as e:
+    print(f"⚠ Ошибка соединения: {e}")
