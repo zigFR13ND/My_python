@@ -69,11 +69,11 @@ else:
 url = 'https://httpbin.org/bearer'
 headers_bearer = {"Authorization": "Bearer your_api_token_123"}  
 
-response_bearer = requests.get(url, headers=headers_bearer)
-
 print("\n📌 8. Запрос с Bearer Token:")
 
 try:
+    response_bearer = requests.get(url, headers=headers_bearer)
+
     if response_bearer.status_code == 401:
         print("❌ Неверный токен! Доступ запрещён.")
     else:
