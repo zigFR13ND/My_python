@@ -72,12 +72,25 @@ headers_bearer = {"Authorization": "Bearer your_api_token_123"}
 print("\n📌 8. Запрос с Bearer Token:")
 
 try:
-    response_bearer = requests.get(url, headers=headers_bearer)
+    response_bearer = requests.get(url, headers=headers_bearer, timeout=5) # ⏳ Если сервер не ответит за 5 секунд, будет ошибка TimeoutError.
 
-    if response_bearer.status_code == 401:
+    if response_bearer.status_code == 401:  # 🔴 Ошибка: Неверный токен
         print("❌ Неверный токен! Доступ запрещён.")
+        new_token = input("Введите новый токен:\n")  # 🆕 Запрашиваем новый токен
+        headers_bearer["Authorization"] = f"Bearer {new_token}"
+
+        # 🔄 Повторный запрос с новым токеном
+        response_bearer = requests.get(url, headers=headers_bearer, timeout=5)
+
+        if response_bearer.status_code == 200:
+            print("✅ Новый токен принят! Доступ разрешён.")
+            print(response_bearer.json())  # Выводим JSON-ответ
+        else:
+            print("❌ Доступ всё ещё запрещён.")
+            
     else:
         print("✅ Токен верный! Доступ разрешён.")
         print(response_bearer.json())  # Выводим ответ
+
 except requests.exceptions.RequestException as e:
     print(f"⚠ Ошибка соединения: {e}")
