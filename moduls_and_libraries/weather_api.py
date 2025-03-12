@@ -43,7 +43,13 @@ if weather_5days_response.status_code == 200:
     for i in range(0, len(weather_5days['list']), 8):
         day = weather_5days['list'][i]
         date = day["dt_txt"].split()[0]  # 📅 Дата
-        print(f"📅 {date}    🌡 {day['main']['temp']} °C   💨 {day['wind']['speed']} м/с   🌤  {day['weather'][0]['description']}")
+        temp = day['main']['temp'] # 🌡 Температура
+        wind = day['wind']['speed'] # 💨 Ветер
+        description = day["weather"][0]["description"]  # 🌤 Описание
+        humidity = day["main"]["humidity"]  # 💧 Влажность
+        pressure = day["main"]["pressure"]  # 📊 Давление
+
+        print(f"📅 {date}  🌡 {temp} °C  💨 {wind} м/с  🌤 {description}  💧 {humidity} %  📊 {pressure} гПа")
 
 else:
     print(f"❌ Ошибка {weather_5days_response.status_code}! Проверь API-ключ.")
