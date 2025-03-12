@@ -6,26 +6,34 @@ load_dotenv()  # Загружаем переменные из .env
 
 API_KEY = os.getenv('WEATHER_API_KEY')  # Получаем токен
 
+# 🏙️ Выбор города: автоопределение или ввод вручную
+choice = input("Выберите способ определения города:\n1 - Автоопределение по IP\n2 - Ввести город вручную\nВаш выбор: ")
 
-# 🔍 Определяем IP и местоположение (широта и долгота)
-geo_url = 'http://ip-api.com/json/?lang=ru'
-geo_response = requests.get(geo_url)
-geo_data = geo_response.json()
+if choice == '1':
+    # 🔍 Определяем IP и местоположение (широта и долгота)
+    geo_url = 'http://ip-api.com/json/?lang=ru'
+    geo_response = requests.get(geo_url)
+    geo_data = geo_response.json()
 
-if geo_response.status_code == 200 and geo_data['status'] == 'success':
-    city = geo_data['city']  # Получаем город
-    country = geo_data['country']  # Получаем страну
-    lat, lon = geo_data['lat'], geo_data['lon'] # ✅ Широта и долгота
-    print(f'🌍 Определено местоположение: {city}, {country}, (Ш: {lat}, Д: {lon})')
+    if geo_response.status_code == 200 and geo_data['status'] == 'success':
+        city = geo_data['city']  # Получаем город
+        country = geo_data['country']  # Получаем страну
+        lat, lon = geo_data['lat'], geo_data['lon'] # ✅ Широта и долгота
+        print(f'🌍 Определено местоположение: {city}, {country}, (Ш: {lat}, Д: {lon})')
+    else:
+        print("❌ Ошибка! Не удалось определить местоположение.")
+        exit()  # Завершаем программу, если город не определён
+elif choice == '2':
+    city = input('Введите название города:'.strip())
 else:
-    print("❌ Ошибка! Не удалось определить местоположение.")
-    exit()  # Завершаем программу, если город не определён
-
-weather_today_url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric&lang=ru'
-weather_today_response = requests.get(weather_today_url)
+    print("❌ Ошибка! Некорректный выбор.")
+    exit()
 
 
 # 🔥 Запрашиваем прогноз на текущий день
+weather_today_url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric&lang=ru'
+weather_today_response = requests.get(weather_today_url)
+
 if weather_today_response.status_code == 200:
     weather_today = weather_today_response.json()
     print(f"\n 📍 Город: {weather_today['name']}")
@@ -37,7 +45,7 @@ else:
 
 
 # 🔥 Запрашиваем прогноз на 5 дней
-weather_5days_url = f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric&lang=ru'
+weather_5days_url = f'https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric&lang=ru'
 weather_5days_response = requests.get(weather_5days_url)
 
 if weather_5days_response.status_code == 200:
