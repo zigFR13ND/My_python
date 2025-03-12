@@ -45,3 +45,5 @@ if weather_5days_response.status_code == 200:
         date = day["dt_txt"].split()[0]  # 📅 Дата
         print(f"📅 {date}    🌡 {day['main']['temp']} °C   💨 {day['wind']['speed']} м/с   🌤  {day['weather'][0]['description']}")
 
+else:
+    print(f"❌ Ошибка {weather_5days_response.status_code}! Проверь API-ключ.")
