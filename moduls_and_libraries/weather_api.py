@@ -24,6 +24,8 @@ else:
 weather_today_url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric&lang=ru'
 weather_today_response = requests.get(weather_today_url)
 
+
+# 🔥 Запрашиваем прогноз на текущий день
 if weather_today_response.status_code == 200:
     weather_today = weather_today_response.json()
     print(f"\n 📍 Город: {weather_today['name']}")
@@ -34,22 +36,33 @@ else:
     print(f'❌ Ошибка {weather_today_response.status_code}! Проверь API-ключ или название города.')
 
 
+# 🔥 Запрашиваем прогноз на 5 дней
 weather_5days_url = f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric&lang=ru'
 weather_5days_response = requests.get(weather_5days_url)
 
 if weather_5days_response.status_code == 200:
     weather_5days = weather_5days_response.json()
     print(f"\nПрогноз погоды на 5 дней в {city}:")
-    for i in range(0, len(weather_5days['list']), 8):
-        day = weather_5days['list'][i]
-        date = day["dt_txt"].split()[0]  # 📅 Дата
-        temp = day['main']['temp'] # 🌡 Температура
-        wind = day['wind']['speed'] # 💨 Ветер
-        description = day["weather"][0]["description"]  # 🌤 Описание
-        humidity = day["main"]["humidity"]  # 💧 Влажность
-        pressure = day["main"]["pressure"]  # 📊 Давление
 
-        print(f"📅 {date}  🌡 {temp} °C  💨 {wind} м/с  🌤 {description}  💧 {humidity} %  📊 {pressure} гПа")
+    with open("weather_5days.txt", "w", encoding='utf-8') as file:
+
+        file.write(f"Прогноз погоды на 5 дней в {city}:\n\n")
+        # 🔄 Выводим прогноз 1 раз в 24 часа (8 записей по 3 часа)
+        for i in range(0, len(weather_5days['list']), 8):
+            day = weather_5days['list'][i]
+            date = day["dt_txt"].split()[0]  # 📅 Дата
+            temp = day['main']['temp'] # 🌡 Температура
+            wind = day['wind']['speed'] # 💨 Ветер
+            description = day["weather"][0]["description"]  # 🌤 Описание
+            humidity = day["main"]["humidity"]  # 💧 Влажность
+            pressure = day["main"]["pressure"]  # 📊 Давление
+
+            weather_5days_text = f"📅 {date}  🌡 {temp}°C  💨 {wind}м/с  🌤 {description}  💧 {humidity}%  📊 {pressure}гПа"
+
+            print(weather_5days_text) # Выводим в консоль
+            file.write(weather_5days_text + '\n') # Записываем в файл
+    
+    print("\n✅ Прогноз сохранён в weather.txt!")
 
 else:
     print(f"❌ Ошибка {weather_5days_response.status_code}! Проверь API-ключ.")
